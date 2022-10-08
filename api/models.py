@@ -1,5 +1,12 @@
 import datetime
-from django.db.models import Model, CharField, TextField, BooleanField, IntegerField
+from django.db.models import (
+    Model,
+    CharField,
+    TextField,
+    BooleanField,
+    IntegerField,
+    AutoField
+)
 
 from .utils import convert_utc_timezone_to_unix_timestamp, generate_random_user_id
 
@@ -13,6 +20,7 @@ ITEM_TYPE = (
 
 
 class Item(Model):
+    id = AutoField(primary_key=True)
     title = CharField(max_length=100, null=True, blank=True)
     hacker_item_id = CharField(
         max_length=50, null=True, blank=True, editable=False)
