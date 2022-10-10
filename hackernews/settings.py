@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_cron',
     'corsheaders',
     'api'
 ]
@@ -127,4 +128,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+CRON_CLASSES = [
+    "api.cron.HackerItemCronJob",
+]
 CORS_ORIGIN_ALLOW_ALL = True  # Remove in prod

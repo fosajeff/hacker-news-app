@@ -5,7 +5,8 @@ from django.db.models import (
     TextField,
     BooleanField,
     IntegerField,
-    AutoField
+    AutoField,
+    DateTimeField
 )
 
 from .utils import convert_utc_timezone_to_unix_timestamp, generate_random_user_id
@@ -32,6 +33,7 @@ class Item(Model):
     score = IntegerField(default=0)
     text = TextField(null=True, blank=True)
     is_hacker_item = BooleanField(default=True)
+    time_added_to_db = DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title if self.title else f'Latest from {self.by}'

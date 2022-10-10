@@ -63,13 +63,13 @@ def run_db_seeder():
     return sync_hacker_items_to_db(hacker_items)
 
 
-# job function
+# job to run
 def get_latest_hacker_item():
     hacker_item_list = get_latest_hacker_items_id(1)
     hacker_item = hacker_item_list[0]
-    qs = Item.objects.filter(hacker_item_id=hacker_item.id)
+    qs = Item.objects.filter(hacker_item_id=hacker_item)
 
-    if (qs.exists()):
+    if not qs.exists():
         return sync_hacker_items_to_db(hacker_item_list)
 
     return
