@@ -41,6 +41,11 @@ class ItemViewSet(viewsets.ViewSet):
 
     def update(self, request, pk=None):
         item = get_object_or_404(self.queryset, pk=pk)
+
+        # Check if item is hacker item
+        if item.hacker_item_id:
+            return Response(status.HTTP_403_FORBIDDEN)
+
         form_data = request.data
 
         item.title = form_data.get("title") or item.title
@@ -52,5 +57,10 @@ class ItemViewSet(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         item = get_object_or_404(self.queryset, pk=pk)
+        
+        # Check if item is hacker item
+        if item.hacker_item_id:
+            return Response(status.HTTP_403_FORBIDDEN)
+
         item.delete()
         return Response(status.HTTP_204_NO_CONTENT)
