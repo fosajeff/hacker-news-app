@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import status
@@ -17,8 +18,15 @@ class ItemViewSet(viewsets.ViewSet):
 
     def list(self, request):
         query_param = request.query_params.get("type")
-        item_qs = Item.objects.filter(type=query_param).order_by(
-            '-time_added_to_db') or self.queryset
+        search_query = request.query_params.get("search")
+
+        if search_query:
+            item_qs = Item.objects.filter(
+                Q(title__icontains=search_query)).order_by(
+                '-time_added_to_db')
+        else:
+            item_qs = Item.objects.filter(type=query_param).order_by(
+                '-time_added_to_db') or self.queryset
 
         pagination = PageNumberPagination()
 
