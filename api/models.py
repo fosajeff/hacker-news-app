@@ -9,14 +9,14 @@ from django.db.models import (
     DateTimeField
 )
 
-from .utils import convert_utc_timezone_to_unix_timestamp, generate_random_user_id
+from .utils import convert_utc_timezone_to_unix_timestamp, generate_random_id
 
 ITEM_TYPE = (
-    ('j', 'job'),
-    ('s', 'story'),
-    ('c', 'comment'),
-    ('p', 'poll'),
-    ('po', 'pollopt')
+    ('job', 'job'),
+    ('story', 'story'),
+    ('comment', 'comment'),
+    ('poll', 'poll'),
+    ('pollopt', 'pollopt')
 )
 
 
@@ -25,10 +25,10 @@ class Item(Model):
     title = CharField(max_length=100, null=True, blank=True)
     hacker_item_id = CharField(
         max_length=50, null=True, blank=True, editable=False)
-    type = CharField(max_length=2, choices=ITEM_TYPE, default='s')
+    type = CharField(max_length=7, choices=ITEM_TYPE, default='story')
     time = CharField(max_length=50, default=convert_utc_timezone_to_unix_timestamp(
         datetime.datetime.utcnow()))
-    by = CharField(max_length=50, default=generate_random_user_id)
+    by = CharField(max_length=50, default=generate_random_id)
     url = CharField(max_length=100, null=True, blank=True)
     score = IntegerField(default=0)
     text = TextField(null=True, blank=True)

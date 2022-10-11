@@ -1,7 +1,7 @@
 from django_cron import CronJobBase, Schedule
 from .helpers import get_latest_hacker_item
 
-from .utils import get_random_string
+from .utils import generate_random_id
 
 
 class HackerItemCronJob(CronJobBase):
@@ -10,7 +10,7 @@ class HackerItemCronJob(CronJobBase):
 
     schedule = Schedule(run_every_mins=JOB_INTERVAL,
                         retry_after_failure_mins=JOB_RETRY_TIME)
-    code = get_random_string(10)
+    code = generate_random_id("cron")
 
     def do(self):
         get_latest_hacker_item()

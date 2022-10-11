@@ -15,12 +15,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Item',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
-                ('hacker_item_id', models.CharField(blank=True, editable=False, max_length=50, null=True)),
-                ('type', models.CharField(choices=[('j', 'job'), ('s', 'story'), ('c', 'comment'), ('p', 'poll'), ('po', 'pollopt')], default='s', max_length=2)),
+                ('hacker_item_id', models.CharField(
+                    blank=True, editable=False, max_length=50, null=True)),
+                ('type', models.CharField(choices=[('j', 'job'), ('s', 'story'), (
+                    'c', 'comment'), ('p', 'poll'), ('po', 'pollopt')], default='s', max_length=2)),
                 ('time', models.CharField(default=1665229956, max_length=50)),
-                ('by', models.CharField(default=api.utils.generate_random_user_id, max_length=50)),
+                ('by', models.CharField(
+                    default=api.utils.generate_random_id, max_length=50)),
                 ('url', models.CharField(blank=True, max_length=100, null=True)),
                 ('score', models.IntegerField(default=0)),
                 ('text', models.TextField(blank=True, null=True)),
