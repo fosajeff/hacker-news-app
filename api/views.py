@@ -2,12 +2,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Item
 from .serializers import ItemSerializer
 
 
 class ItemViewSet(viewsets.ViewSet):
+    paginate_by = 5
     """
     API endpoint for GET, POST, PUT, DELETE Hacker Item.
     """
@@ -17,8 +19,12 @@ class ItemViewSet(viewsets.ViewSet):
         query_param = request.query_params.get("type")
         item_qs = Item.objects.filter(type=query_param).order_by(
             '-time_added_to_db') or self.queryset
-        serializer = ItemSerializer(item_qs, many=True)
-        return Response(serializer.data)
+
+        pagination = PageNumberPagination()
+
+        qs = pagination.paginate_queryset(item_qs, request)
+        serializer = ItemSerializer(qs, many=True)
+        return pagination.get_paginated_response(serializer.data)
 
     def create(self, request):
         form_data = request.data
@@ -57,7 +63,7 @@ class ItemViewSet(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         item = get_object_or_404(self.queryset, pk=pk)
-        
+
         # Check if item is hacker item
         if item.hacker_item_id:
             return Response(status.HTTP_403_FORBIDDEN)
