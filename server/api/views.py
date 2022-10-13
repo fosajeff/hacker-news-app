@@ -2,8 +2,10 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
 from rest_framework import status
-from rest_framework.pagination import PageNumberPagination
+
+from .helpers import get_hacker_user
 
 from .models import Item
 from .serializers import ItemSerializer
@@ -24,15 +26,16 @@ class ItemViewSet(viewsets.ViewSet):
             item_qs = Item.objects.filter(
                 Q(title__icontains=search_query)).order_by(
                 '-time_added_to_db')
+
+        elif query_param == "":
+            serializer = ItemSerializer(self.queryset, many=True)
+            return Response(serializer.data)
         else:
             item_qs = Item.objects.filter(type=query_param).order_by(
-                '-time_added_to_db') or self.queryset
+                '-time_added_to_db')
 
-        pagination = PageNumberPagination()
-
-        qs = pagination.paginate_queryset(item_qs, request)
-        serializer = ItemSerializer(qs, many=True)
-        return pagination.get_paginated_response(serializer.data)
+        serializer = ItemSerializer(item_qs, many=True)
+        return Response(serializer.data)
 
     def create(self, request):
         form_data = request.data
@@ -78,3 +81,13 @@ class ItemViewSet(viewsets.ViewSet):
 
         item.delete()
         return Response(status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def get_user(request, username):
+    """
+    API endpoint that returns hacker user by username
+    """
+
+    user = get_hacker_user(username)
+    return Response(user, status.HTTP_200_OK)

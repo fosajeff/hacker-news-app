@@ -5,10 +5,13 @@ from . import views
 #
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(
-    "items", views.ItemViewSet)
+    "items", views.ItemViewSet
+)
+
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("users/<username>", views.get_user)
 ]
 
 admin.site.site_header = 'Hacker News'

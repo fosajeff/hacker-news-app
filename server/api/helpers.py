@@ -1,19 +1,25 @@
+from datetime import datetime
 from django.db import IntegrityError
 import requests
 from .models import Item
 
+BASE_URL = "https://hacker-news.firebaseio.com/v0"
+
 
 def get_latest_hacker_items_id(amount):
-    r = requests.get('https://hacker-news.firebaseio.com/v0/newstories.json')
-    data = r.json()[:amount]
-    return data
+    try:
+        r = requests.get(f'{BASE_URL}/newstories.json')
+        data = r.json()[:amount]
+        return data
+    except ConnectionError as e:
+        print("Connection error", e)
 
 
 def get_hacker_item_by_id(id):
     if not id:
         return
 
-    r = requests.get(f'https://hacker-news.firebaseio.com/v0/item/{id}.json')
+    r = requests.get(f'{BASE_URL}/item/{id}.json')
     return r.json()
 
 
@@ -56,8 +62,8 @@ def sync_hacker_items_to_db(items):
 
 # app start seed function
 def run_db_seeder():
-    print("Fetching 10 latest hacker news items to seed database, please wait....")
-    hacker_items = get_latest_hacker_items_id(10)
+    print("Fetching 100 latest hacker news items to seed database, please wait....")
+    hacker_items = get_latest_hacker_items_id(100)
     print("Seeding started. This may take some time, please wait...")
     print("App will immediately start after seeding completes")
     return sync_hacker_items_to_db(hacker_items)
@@ -70,6 +76,13 @@ def get_latest_hacker_item():
     qs = Item.objects.filter(hacker_item_id=hacker_item)
 
     if not qs.exists():
+        print(f"New item retrieved and synced to DB at {datetime.now()}")
         return sync_hacker_items_to_db(hacker_item_list)
 
     return
+
+
+def get_hacker_user(username):
+    r = requests.get(f'{BASE_URL}/user/{username}.json')
+    data = r.json()
+    return data
