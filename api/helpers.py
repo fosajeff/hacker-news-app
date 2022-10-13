@@ -67,7 +67,7 @@ def sync_hacker_items_to_db(items):
 def run_db_seeder():
     print(
         f"Fetching {NUMBER_OF_SEED_ITEMS} latest hacker news items to seed database, please wait....")
-    hacker_items = get_latest_hacker_items_id(NUMBER_OF_SEED_ITEMS)
+    hacker_items = get_latest_hacker_items_id((int(NUMBER_OF_SEED_ITEMS)))
     print("Seeding started. This may take some time, please wait...")
     print("App will immediately start after seeding completes")
     return sync_hacker_items_to_db(hacker_items)
