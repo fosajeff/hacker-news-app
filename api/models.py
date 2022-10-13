@@ -22,7 +22,7 @@ ITEM_TYPE = (
 
 class Item(Model):
     id = AutoField(primary_key=True)
-    title = CharField(max_length=100, null=True, blank=True)
+    title = CharField(max_length=500, null=True, blank=True)
     hacker_item_id = CharField(
         max_length=50, null=True, blank=True, editable=False)
     type = CharField(max_length=7, choices=ITEM_TYPE, default='story')
