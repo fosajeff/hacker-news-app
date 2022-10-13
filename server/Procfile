@@ -1,1 +1,0 @@
-web: gunicorn server.hackernews.wsgi --log-file -
