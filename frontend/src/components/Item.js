@@ -57,6 +57,7 @@ const Item = ({ data }) => {
         <Box mt={5}>
           <Stack mb={6} direction={"row"} spacing={3} align={"center"}>
             <Text
+              noOfLines={[1, 2, 3]}
               color={"green.500"}
               fontWeight={800}
               fontSize={"sm"}
