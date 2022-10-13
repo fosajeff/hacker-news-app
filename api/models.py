@@ -28,8 +28,8 @@ class Item(Model):
     type = CharField(max_length=7, choices=ITEM_TYPE, default='story')
     time = CharField(max_length=50, default=convert_utc_timezone_to_unix_timestamp(
         datetime.datetime.utcnow()))
-    by = CharField(max_length=50, default=generate_random_id)
-    url = CharField(max_length=100, null=True, blank=True)
+    by = CharField(max_length=200, default=generate_random_id)
+    url = CharField(max_length=500, null=True, blank=True)
     score = IntegerField(default=0)
     text = TextField(null=True, blank=True)
     is_hacker_item = BooleanField(default=True)
