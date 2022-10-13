@@ -1,9 +1,12 @@
+import os
 from datetime import datetime
 from django.db import IntegrityError
 import requests
 from .models import Item
 
 BASE_URL = "https://hacker-news.firebaseio.com/v0"
+NUMBER_OF_SEED_ITEMS = os.environ.get(
+    'NUMBER_OF_SEED_ITEMS', '')
 
 
 def get_latest_hacker_items_id(amount):
@@ -62,8 +65,9 @@ def sync_hacker_items_to_db(items):
 
 # app start seed function
 def run_db_seeder():
-    print("Fetching 100 latest hacker news items to seed database, please wait....")
-    hacker_items = get_latest_hacker_items_id(100)
+    print(
+        f"Fetching {NUMBER_OF_SEED_ITEMS} latest hacker news items to seed database, please wait....")
+    hacker_items = get_latest_hacker_items_id(NUMBER_OF_SEED_ITEMS)
     print("Seeding started. This may take some time, please wait...")
     print("App will immediately start after seeding completes")
     return sync_hacker_items_to_db(hacker_items)
